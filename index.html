@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRaft - QR Code Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>QRaft</h1>
+            <p>Generate QR codes from any text, URL, or email</p>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="textInput">Enter your text</label>
+                    <textarea 
+                        id="textInput" 
+                        placeholder="Enter URL, email, or any text..."
+                        rows="3"
+                    ></textarea>
+                </div>
+
+                <div class="options-grid">
+                    <div class="form-group">
+                        <label for="sizeInput">Size</label>
+                        <input 
+                            type="range" 
+                            id="sizeInput" 
+                            min="100" 
+                            max="400" 
+                            value="250"
+                            step="10"
+                        >
+                        <span id="sizeValue">250px</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="marginInput">Margin</label>
+                        <input 
+                            type="range" 
+                            id="marginInput" 
+                            min="0" 
+                            max="10" 
+                            value="4"
+                            step="1"
+                        >
+                        <span id="marginValue">4</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="darkColor">Dark Color</label>
+                        <div class="color-input-wrapper">
+                            <input 
+                                type="color" 
+                                id="darkColor" 
+                                value="#000000"
+                            >
+                            <input 
+                                type="text" 
+                                id="darkColorText" 
+                                value="#000000"
+                                maxlength="7"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lightColor">Light Color</label>
+                        <div class="color-input-wrapper">
+                            <input 
+                                type="color" 
+                                id="lightColor" 
+                                value="#ffffff"
+                            >
+                            <input 
+                                type="text" 
+                                id="lightColorText" 
+                                value="#ffffff"
+                                maxlength="7"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="errorCorrection">Error Correction</label>
+                        <select id="errorCorrection">
+                            <option value="L">Low (7%)</option>
+                            <option value="M" selected>Medium (15%)</option>
+                            <option value="Q">Quartile (25%)</option>
+                            <option value="H">High (30%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="generateBtn" class="btn btn-primary">Generate QR Code</button>
+                    <button id="clearBtn" class="btn btn-secondary">Clear</button>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <div id="qrcode" class="qr-container"></div>
+                
+                <div id="downloadOptions" class="download-options" style="display: none;">
+                    <button id="downloadPNG" class="btn btn-download">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download PNG
+                    </button>
+                    <button id="downloadSVG" class="btn btn-download">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download SVG
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>QRaft - Simple & Fast QR Code Generator</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
